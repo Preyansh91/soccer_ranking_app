@@ -78,6 +78,7 @@ def generate_rankings(rankings_dict):
     """
     logging.info("Generate ranks based on points")
     count = 1
+    current_rank_teams = 1
     with open('expected_output.txt', 'a') as fh:
         first_team, first_score = list(rankings_dict.keys())[0], list(rankings_dict.values())[0]
         fh.write('{}. {}, {} pts'.format(count, first_team, first_score))
@@ -86,8 +87,13 @@ def generate_rankings(rankings_dict):
         for key, value in rankings_dict.items():
             if value == first_score:
                 count += 0
+                current_rank_teams += 1
             else:
-                count += 1
+                if current_rank_teams > 1:
+                    count = count + current_rank_teams
+                    current_rank_teams = 0
+                else:
+                    count += 1
             fh.write('{}. {}, {} pts'.format(count, key, value))
             fh.write('\n')
             first_score = value
